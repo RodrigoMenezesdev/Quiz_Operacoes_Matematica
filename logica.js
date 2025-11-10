@@ -52,10 +52,11 @@ function shuffleArray(array) {
 }
 
 // ====================================================================
-// FUNÇÕES DE ÁUDIO
+// FUNÇÕES DE ÁUDIO (AJUSTADA)
 // ====================================================================
 
 function tocarMusica() {
+    // Tenta iniciar a música se ela ainda não começou e o volume estiver LIGADO
     if (!musicaIniciada && musicaFundo && volumeLigado) {
         musicaFundo.volume = volumeAtual;
         musicaFundo.play().then(() => {
@@ -69,21 +70,24 @@ function tocarMusica() {
 function alternarVolume() {
     const botaoVolume = document.getElementById('botao-volume');
 
+    // Tenta tocar a música (necessário devido ao bloqueio de autoplay em navegadores)
     tocarMusica(); 
 
     if (volumeLigado) {
-        // Desligar volume
+        // Desligar volume (MUTE)
         musicaFundo.volume = 0;
         volumeLigado = false;
         if (botaoVolume) {
-            botaoVolume.innerHTML = "🔇"; // Ícone de mudo
+            botaoVolume.innerHTML = "🔇"; // Ícone de mudo (com a linha)
+            botaoVolume.classList.remove('volume-on'); // Remove o fundo colorido
         }
     } else {
-        // Ligar volume
+        // Ligar volume (UNMUTE)
         musicaFundo.volume = volumeAtual; 
         volumeLigado = true;
         if (botaoVolume) {
-            botaoVolume.innerHTML = "🎶"; // Ícone de som
+            botaoVolume.innerHTML = "🔊"; // Ícone de som ligado (sem a linha)
+            botaoVolume.classList.add('volume-on'); // Adiciona o fundo colorido
         }
     }
 }
@@ -263,10 +267,27 @@ function mostrarResultadoFinal() {
     });
 }
 
+// ====================================================================
+// FUNÇÕES DE RETORNO (CORRIGIDAS)
+// ====================================================================
+
+/**
+ * Função CORRIGIDA para voltar da Seleção de Nível para a Seleção de Operação.
+ */
+function voltarDaSelecaoNivel() {
+    mostrarSecao(operacaoSelecaoDiv);
+}
+
+/**
+ * Função ORIGINAL que estava no lugar errado no HTML, mas que agora está correta.
+ * Volta da Configuração Final (onde define o número de problemas)
+ */
 function voltarDaConfigFinal() {
+    // Se for tabuada, volta para a tela de Operação.
     if (operacaoSelecionada === '5') {
         mostrarSecao(operacaoSelecaoDiv);
     } else {
+        // Se for outra operação, volta para a tela de Seleção de Nível.
         mostrarSecao(nivelSelecaoDiv);
     }
 }
@@ -295,7 +316,8 @@ function reiniciarJogo() {
     if (botaoVolume) {
         volumeLigado = true;
         volumeAtual = 0.10; // Volume inicial ajustado
-        botaoVolume.innerHTML = "🎶";
+        botaoVolume.innerHTML = "🔊"; // Ícone de som ligado (sem a linha)
+        botaoVolume.classList.add('volume-on'); // Adiciona o fundo colorido
     }
 }
 
