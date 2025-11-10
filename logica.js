@@ -13,7 +13,7 @@ let timer;
 // CONTROLE DE ÁUDIO
 const musicaFundo = document.getElementById('musicaFundo');
 let musicaIniciada = false; 
-let volumeAtual = 0.10; // 📢 Nível inicial ajustado para 10%
+let volumeAtual = 0.10; // Nível inicial ajustado para 10%
 let volumeLigado = true; // Estado inicial
 
 // Mapeamento de elementos HTML
@@ -37,7 +37,22 @@ const detalhesProblemasDiv = document.getElementById('detalhes-problemas');
 const cronometroDisplay = document.getElementById('cronometro-display'); 
 
 // ====================================================================
-// FUNÇÃO DE ÁUDIO
+// FUNÇÕES AUXILIARES
+// ====================================================================
+
+/**
+ * Embaralha a ordem dos elementos de um array (Fisher-Yates)
+ */
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
+// ====================================================================
+// FUNÇÕES DE ÁUDIO
 // ====================================================================
 
 function tocarMusica() {
@@ -51,14 +66,9 @@ function tocarMusica() {
     }
 }
 
-// ====================================================================
-// FUNÇÃO DE CONTROLE DE VOLUME (ATUALIZADA)
-// ====================================================================
-
 function alternarVolume() {
     const botaoVolume = document.getElementById('botao-volume');
 
-    // Toca a música no primeiro clique (se ainda não tiver iniciado)
     tocarMusica(); 
 
     if (volumeLigado) {
@@ -82,9 +92,6 @@ function alternarVolume() {
 // FUNÇÕES DE CONTROLE DE FLUXO DA UI (Interface do Usuário)
 // ====================================================================
 
-/**
- * Função Segura para mostrar uma seção e esconder todas as outras.
- */
 function mostrarSecao(secaoParaMostrar) {
     pararCronometro(); 
     
@@ -205,6 +212,7 @@ function verificarResposta(respostaUsuarioValor, respostaCorretaValor, botaoClic
     } else {
         botaoClicado.classList.add('errada-visual');
         Array.from(opcoesRespostasDiv.children).forEach(button => {
+             // Tratamento para garantir que a comparação seja feita com o valor numérico
              const respostaNaOpcao = parseInt(button.textContent.replace(/[A-Za-z\)\s]/g, '').trim());
             if (respostaNaOpcao === respostaCorretaValor) {
                 button.classList.add('correta-visual');
@@ -263,9 +271,6 @@ function voltarDaConfigFinal() {
     }
 }
 
-/**
- * Reinicia o jogo e volta para a tela de seleção de operação.
- */
 function reiniciarJogo() {
     pararCronometro(); 
     
@@ -529,6 +534,9 @@ function obterDificuldadeNome(nivel) {
     return 'Leve';
 }
 
+/**
+ * Função ATUALIZADA para gerar problemas de tabuada.
+ */
 function iniciarQuizTabuada() {
     let tabuadaEscolhida;
     while (true) {
@@ -548,22 +556,52 @@ function iniciarQuizTabuada() {
         }
     }
     
-    for (let i = 0; i < numProblemasTotal; i++) {
-        problemasGerados.push(gerarProblemaTabuada(tabuadaEscolhida));
+    if (tabuadaEscolhida !== 0) {
+        // 1. Gera multiplicadores de 1 a 10 (ou até 12, se preferir mais desafios)
+        let multiplicadores = Array.from({length: 10}, (_, i) => i + 1); 
+        
+        // 2. Embaralha a lista para aleatoriedade
+        shuffleArray(multiplicadores);
+        
+        // 3. Limita a lista ao número de problemas solicitados
+        const multiplicadoresUsar = multiplicadores.slice(0, Math.min(numProblemasTotal, multiplicadores.length));
+
+        // 4. Gera os problemas usando a lista de multiplicadores únicos
+        multiplicadoresUsar.forEach(multiplicador => {
+            // Passa o multiplicador fixo para a função geradora
+            problemasGerados.push(gerarProblemaTabuada(tabuadaEscolhida, multiplicador));
+        });
+        
+    } else {
+        // MODO ALEATÓRIO GERAL (mantém o random)
+        for (let i = 0; i < numProblemasTotal; i++) {
+            problemasGerados.push(gerarProblemaTabuada(tabuadaEscolhida));
+        }
     }
     
     carregarProximoProblema();
 }
 
-function gerarProblemaTabuada(tabuadaEscolhida) {
+/**
+ * Função ATUALIZADA para aceitar um multiplicador fixo e evitar repetição.
+ */
+function gerarProblemaTabuada(tabuadaEscolhida, multiplicadorFixo = null) {
     let tabuada, multiplicador;
     
     if (tabuadaEscolhida === 0) {
+        // MODO ALEATÓRIO GERAL
         tabuada = Math.floor(Math.random() * (15 - 2 + 1)) + 2; 
         multiplicador = Math.floor(Math.random() * 10) + 1;
     } else {
+        // MODO TABUADA FIXA
         tabuada = tabuadaEscolhida;
-        multiplicador = Math.floor(Math.random() * 10) + 1; 
+        if (multiplicadorFixo !== null) {
+             // Usa o multiplicador fornecido e garantido ser único
+            multiplicador = multiplicadorFixo; 
+        } else {
+            // Fallback (cria um multiplicador aleatório de 1 a 10)
+            multiplicador = Math.floor(Math.random() * 10) + 1; 
+        }
     }
 
     const respostaCorreta = tabuada * multiplicador;
