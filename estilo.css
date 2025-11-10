@@ -1,0 +1,301 @@
+/*
+ * ARQUIVO: estilo.css
+ */
+
+:root {
+    --cor-primaria: #00bcd4; /* Azul Ciano */
+    --cor-secundaria: #ff5722; /* Laranja Escuro */
+    --cor-fundo: #e0f7fa; /* Azul Claro Muito Suave */
+    --cor-texto: #333;
+    --cor-botao-texto: white;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: var(--cor-fundo);
+    color: var(--cor-texto);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Alinha o conteúdo ao topo */
+    min-height: 100vh;
+}
+
+.container {
+    position: relative; /* Adicionado para posicionar os ícones de forma absoluta */
+    background-color: white;
+    padding: 20px;
+    margin: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+}
+
+/* --- NOVO ESTILO PARA CABEÇALHO E ÍCONES (Volume/Config) --- */
+
+.header-icons {
+    position: absolute;
+    top: 15px; 
+    right: 15px; 
+    display: flex;
+    gap: 10px;
+    z-index: 10;
+}
+
+.volume-icon, .config-icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.8em; 
+    padding: 0;
+    margin: 0;
+    line-height: 1; 
+    color: #444; 
+    transition: color 0.2s;
+}
+
+.volume-icon:hover {
+    color: var(--cor-primaria); 
+}
+
+h1 {
+    color: var(--cor-secundaria);
+    margin-bottom: 5px;
+}
+
+h2 {
+    color: var(--cor-primaria);
+    border-bottom: 2px solid var(--cor-primaria);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    font-size: 1.4em;
+}
+
+h3 {
+    margin-top: 20px;
+    color: #555;
+    font-size: 1.1em;
+}
+
+/* --- ESTILO DOS BOTÕES --- */
+
+.choice-button,
+.action-button {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: bold;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.choice-button {
+    background-color: var(--cor-primaria);
+    color: var(--cor-botao-texto);
+    box-shadow: 0 3px 0 #008fa5; 
+}
+
+.choice-button:hover:not(:disabled) {
+    background-color: #00a4bb;
+}
+.choice-button:active:not(:disabled) {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 #008fa5;
+}
+
+/* Botões de Ação (Iniciar, Próximo) */
+.action-button {
+    background-color: #4CAF50; /* Verde */
+    color: white;
+    box-shadow: 0 3px 0 #388e3c;
+}
+.action-button:hover:not(:disabled) {
+    background-color: #45a049;
+}
+.action-button:active:not(:disabled) {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 #388e3c;
+}
+
+
+/* Botões de Voltar/Sair */
+.back-button {
+    background: none;
+    border: 1px solid #ccc;
+    color: #666;
+    padding: 8px 15px;
+    margin-top: 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.back-button:hover {
+    background-color: #eee;
+}
+
+.sair-button {
+    background-color: #f44336; /* Vermelho */
+    color: white;
+    box-shadow: 0 3px 0 #d32f2f;
+    padding: 12px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.sair-button:hover {
+    background-color: #e53935;
+}
+
+/* --- ESTILO DE INPUT E CONTADORES --- */
+
+label {
+    display: block;
+    margin-top: 20px;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input[type="number"] {
+    width: 80px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 1em;
+}
+
+.contador-problemas {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: var(--cor-secundaria);
+    margin-top: 5px;
+    margin-bottom: 20px;
+}
+
+/* PERGUNTA MAIOR E AZUL */
+#pergunta-expressao {
+    font-size: 3em; 
+    color: var(--cor-primaria);
+    font-weight: bold;
+    margin: 30px 0;
+    min-height: 50px;
+}
+
+/* INSTRUÇÃO DE CONFIGURAÇÃO MAIOR E AZUL */
+#jogo-instrucao {
+    font-size: 1.3em;
+    color: var(--cor-primaria); 
+    font-weight: bold;
+    margin: 25px 0; 
+    line-height: 1.5;
+}
+
+
+/* --- ESTILO DAS OPÇÕES DE RESPOSTA NO JOGO --- */
+
+.opcoes-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.opcoes-grid button {
+    margin: 0; 
+}
+
+.opcoes-grid button span {
+    font-weight: normal;
+    margin-right: 5px;
+    color: #fff;
+    font-size: 0.9em;
+}
+
+/* --- FEEDBACK VISUAL DAS RESPOSTAS --- */
+
+.correta-visual {
+    background-color: #4CAF50 !important; /* Verde */
+    box-shadow: 0 3px 0 #388e3c !important;
+}
+
+.errada-visual {
+    background-color: #f44336 !important; /* Vermelho */
+    box-shadow: 0 3px 0 #d32f2f !important;
+}
+
+/* --- RESULTADO FINAL --- */
+
+#resultado-final-titulo {
+    color: #4CAF50;
+}
+#pontuacao-final strong {
+    font-size: 1.5em;
+    color: var(--cor-secundaria);
+}
+#detalhes-problemas {
+    text-align: left;
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+}
+#detalhes-problemas p {
+    margin: 5px 0;
+    padding-bottom: 5px;
+    border-bottom: 1px dotted #eee;
+}
+
+.botoes-resultado {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 20px;
+}
+.botoes-resultado button {
+    flex-grow: 1;
+}
+
+/* --- CRONÔMETRO --- */
+
+#cronometro-display {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: var(--cor-primaria);
+    margin: 10px 0;
+    border: 3px solid var(--cor-primaria);
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+    transition: color 0.5s, border-color 0.5s;
+}
+
+.alerta-tempo {
+    color: #f44336 !important; /* Vermelho */
+    border-color: #f44336 !important;
+    animation: pulsar 1s infinite alternate;
+}
+
+@keyframes pulsar {
+    from {
+        transform: scale(1);
+        opacity: 1;
+    }
+    to {
+        transform: scale(1.05);
+        opacity: 0.8;
+    }
+}
